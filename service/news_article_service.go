@@ -61,7 +61,7 @@ func (svc *NewsArticleService) SearchByLink(link string) (*[]*models.NewsArticle
 }
 
 func (svc *NewsArticleService) Delete(article *models.NewsArticle) error {
-	return svc.database.Delete("id = ?", article.ID).Error
+	return svc.database.Delete(article,"id = ?", article.ID).Error
 }
 
 func (svc *NewsArticleService) GetById(id uint) (*models.NewsArticle, error) {

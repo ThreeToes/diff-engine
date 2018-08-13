@@ -183,6 +183,40 @@ func TestSearchByLink(t *testing.T){
 
 func TestDelete(t *testing.T) {
 
+	svc, err := setup()
+	if err != nil {
+		t.Log(err)
+		t.Fail()
+		return
+	}
+	now := time.Now()
+	article := models.NewsArticle{
+		Body: "herpderp",
+		Link: "http://test.com/",
+		Date: &now,
+		Title: "Great title, well done",
+	}
+	returned, err := svc.Save(&article)
+	if returned.ID == 0 || err != nil {
+		t.Log("Failed to save!")
+		Fail(t, err, svc)
+		return
+	}
+	err = svc.Delete(returned)
+	if err != nil {
+		Fail(t, err, svc)
+		return
+	}
+	links, err := svc.SearchByLink(article.Link)
+	if err != nil {
+		Fail(t, err, svc)
+		return
+	}
+	if len(*links) > 0 {
+		Fail(t, "Nothing was deleted!", svc)
+		return
+	}
+	destroy(svc)
 }
 
 func Fail(t *testing.T, msg interface{}, svc *service.NewsArticleService) {
