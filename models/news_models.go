@@ -1,15 +1,23 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type NewsArticle struct {
-	gorm.Model
-	Id int64 `gorm:"type:bigint;PRIMARY_KEY;AUTO_INCREMENT"`
+	ID uint `gorm:"primary_key; auto_increment"`
 	Title string `gorm:"type:text;NOT NULL"`
 	Link string `gorm:"type:text"`
-	Date *time.Time `gorm:"type:timestamp"`
+	Date *time.Time `gorm:"type:timestamp;"`
+	CreatedAt *time.Time `gorm:"type:timestamp;DEFAULT:NOW()"`
 	Body string `gorm:"type:text"`
+}
+
+type NewsArticlePersistenceLayer interface {
+	Initialise() error
+	Destroy() error
+	Save(article *NewsArticle) (*NewsArticle, error)
+	SearchByLink(link string) (*[]*NewsArticle, error)
+	Delete(article *NewsArticle) error
+	GetById(id uint) (*NewsArticle, error)
 }
