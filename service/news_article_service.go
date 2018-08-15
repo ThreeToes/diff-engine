@@ -56,7 +56,7 @@ func (svc *NewsArticleService) Save(article *models.NewsArticle) (*models.NewsAr
 
 func (svc *NewsArticleService) SearchByLink(link string) (*[]*models.NewsArticle, error) {
 	var newsArticles [] *models.NewsArticle
-	q := svc.database.Where("link = ?", link).Find(&newsArticles)
+	q := svc.database.Order("id").Where("link = ?", link).Find(&newsArticles)
 	return &newsArticles, q.Error
 }
 

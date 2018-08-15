@@ -4,7 +4,6 @@ import (
 	"flag"
 	"log"
 	"github.com/threetoes/diff-engine/config"
-	"github.com/threetoes/diff-engine/database"
 	"github.com/threetoes/diff-engine/service"
 )
 
@@ -24,13 +23,10 @@ func main(){
 		return
 	}
 	feedSvc := service.NewFeedService(conf.Feeds)
-	feeds, err := feedSvc.GetCurrentFeeds()
-	for k,v := range feeds {
-		log.Printf("%s:\n", k)
-		for _, item := range v {
-			log.Printf("\t%s\n",item.Title)
-		}
-	}
-	database.ConnectToDb(conf.Database)
+	articleSvc,err := service.NewArticleService(conf.Database)
+	articleSvc.Initialise()
+	diffSvc := service.NewDiff(feedSvc, articleSvc)
+	diffSvc.FetchAndSaveDiffs()
+	articleSvc.Destroy()
 }
 

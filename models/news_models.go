@@ -11,6 +11,7 @@ type NewsArticle struct {
 	Date *time.Time `gorm:"type:timestamp;"`
 	CreatedAt *time.Time `gorm:"type:timestamp;DEFAULT:NOW()"`
 	Body string `gorm:"type:text"`
+	Author string `gorm:"type:text"`
 }
 
 type NewsArticlePersistenceLayer interface {
