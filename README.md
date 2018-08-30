@@ -24,7 +24,8 @@ The file itself has the structure
   "feeds" : {
     "vice": {
         "url":"https://www.vice.com/en_us/rss",
-        "article_selector": ".article__body"
+        "article_selector": ".article__body",
+        "title_selector": ".article__title"
     }
   }
 }

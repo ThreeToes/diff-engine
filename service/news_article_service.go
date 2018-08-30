@@ -81,3 +81,15 @@ func (svc *NewsArticleService) GetWatchList() (*[]models.NewsArticle, error){
 	}
 	return &articles, nil
 }
+
+func (svc *NewsArticleService) GetWatchListBySource(source string) (*[]models.NewsArticle, error){
+	var articles []models.NewsArticle
+	db := svc.database.Where("date > (now() - interval '1 week') AND source = ?", source).
+		Order("id desc").
+		Select("DISTINCT link, id, title, link, date, created_at, body, author").
+		Find(&articles)
+	if db.Error != nil {
+		return nil, db.Error
+	}
+	return &articles, nil
+}

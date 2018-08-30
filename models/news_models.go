@@ -22,5 +22,6 @@ type NewsArticlePersistenceLayer interface {
 	SearchByLink(link string) (*[]*NewsArticle, error)
 	Delete(article *NewsArticle) error
 	GetById(id uint) (*NewsArticle, error)
-	GetWatchlist() (*[]*NewsArticle, error)
+	GetWatchList() (*[]NewsArticle, error)
+	GetWatchListBySource(source string) (*[]NewsArticle, error)
 }

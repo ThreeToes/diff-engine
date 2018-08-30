@@ -45,6 +45,7 @@ type FeedLocations map[string] *FeedEntry
 type FeedEntry struct {
 	Url					string `json:"url"`
 	ArticleSelector 	string `json:"article_selector"`
+	TitleSelector		string `json:"title_selector"`
 }
 
 type ConfigFileOptions struct {
