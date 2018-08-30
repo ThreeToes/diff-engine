@@ -22,7 +22,10 @@ The file itself has the structure
     "ssl_mode": "disable"
   },
   "feeds" : {
-    "vice": "https://www.vice.com/en_us/rss"
+    "vice": {
+        "url":"https://www.vice.com/en_us/rss",
+        "article_selector": ".article__body"
+    }
   }
 }
 ```

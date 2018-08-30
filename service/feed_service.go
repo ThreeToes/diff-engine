@@ -21,10 +21,10 @@ type GoFeedService struct {
 func (svc *GoFeedService) GetCurrentFeeds() (FeedMap, error) {
 	fm := FeedMap{}
 	for k,v := range *svc.feeds {
-		feed, _ := svc.parser.ParseURL(v)
+		feed, _ := svc.parser.ParseURL(v.Url)
 		transformed := make([]*models.NewsArticle,0)
 		for _,item := range feed.Items {
-			transformed = append(transformed, transform(item))
+			transformed = append(transformed, transform(item, v))
 		}
 		fm[k] = transformed
 	}
@@ -38,9 +38,10 @@ func NewFeedService(locations *config.FeedLocations) *GoFeedService {
 	return &feedService
 }
 
-func transform(item *gofeed.Item) *models.NewsArticle {
+func transform(item *gofeed.Item, feed *config.FeedEntry) *models.NewsArticle {
 	var a models.NewsArticle
 	a.Link = item.Link
+	a.Source = feed.Url
 	a.Title = item.Title
 	a.Author = item.Author.Name
 	a.Date = item.PublishedParsed

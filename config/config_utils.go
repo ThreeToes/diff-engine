@@ -40,7 +40,12 @@ type DatabaseOptions struct {
 	SslMode  string `json:"ssl_mode"`
 }
 
-type FeedLocations map[string]string
+type FeedLocations map[string] *FeedEntry
+
+type FeedEntry struct {
+	Url					string `json:"url"`
+	ArticleSelector 	string `json:"article_selector"`
+}
 
 type ConfigFileOptions struct {
 	Database *DatabaseOptions `json:"database"`

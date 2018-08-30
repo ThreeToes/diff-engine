@@ -69,3 +69,15 @@ func (svc *NewsArticleService) GetById(id uint) (*models.NewsArticle, error) {
 	q := svc.database.First(&article)
 	return &article, q.Error
 }
+
+func (svc *NewsArticleService) GetWatchList() (*[]models.NewsArticle, error){
+	var articles []models.NewsArticle
+	db := svc.database.Where("date > (now() - interval '1 week')").
+		Order("id desc").
+		Select("DISTINCT link, id, title, link, date, created_at, body, author").
+		Find(&articles)
+	if db.Error != nil {
+		return nil, db.Error
+	}
+	return &articles, nil
+}
