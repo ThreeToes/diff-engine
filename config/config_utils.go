@@ -47,10 +47,14 @@ type FeedEntry struct {
 	ArticleSelector 	string `json:"article_selector"`
 	TitleSelector		string `json:"title_selector"`
 }
+type ServiceSettings struct {
+	ArticleGrabCooldown	int `json:"article_grab_cooldown"`
+}
 
 type ConfigFileOptions struct {
 	Database *DatabaseOptions `json:"database"`
 	Feeds    *FeedLocations   `json:"feeds"`
+	ServiceSettings *ServiceSettings `json:"service_settings"`
 }
 
 func GetConfig(path string) (*ConfigFileOptions, error) {

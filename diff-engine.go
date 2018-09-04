@@ -5,12 +5,11 @@ import (
 	"log"
 	"github.com/threetoes/diff-engine/config"
 	"github.com/threetoes/diff-engine/service"
-	"github.com/sergi/go-diff/diffmatchpatch"
+	"github.com/threetoes/diff-engine/models"
+	"sync"
+	"bufio"
+	"os"
 )
-
-type Signal int
-
-const STOP = 1
 
 func main(){
 	var cmdLine config.CommandLineOptions
@@ -27,23 +26,16 @@ func main(){
 		log.Println(err)
 		return
 	}
-	feedSvc := service.NewFeedService(conf.Feeds)
-	articleSvc,err := service.NewArticleService(conf.Database)
-	articleSvc.Initialise()
-	diffSvc := service.NewDiff(feedSvc, articleSvc)
-	diffSvc.FetchAndSaveFeed()
-	changes, err := diffSvc.CheckForDiffs()
-	diffLib := diffmatchpatch.New()
-	if err != nil {
-		log.Printf("%s\n",err)
-	} else {
-		for _, change := range *changes {
-			log.Printf("REEROO! STEALTH EDIT!\n")
-			diffs := diffLib.DiffMain(change.Original.Body, change.Changed.Body, false)
-			for _, d := range diffs {
-				log.Printf("%s \n", d.Text)
-			}
-		}
-	}
-	articleSvc.Destroy()
+	cntrl := make(chan service.Signal)
+	dffs := make(chan *models.DiffText)
+	var grp sync.WaitGroup
+	grp.Add(1)
+	go service.Differ(conf, dffs, cntrl, &grp)
+	log.Printf("Press Enter to quit")
+	reader := bufio.NewReader(os.Stdin)
+	_, _ = reader.ReadString('\n')
+	log.Printf("Shutting down")
+	cntrl <- service.STOP
+	grp.Wait()
+	log.Printf("Goodbye!")
 }

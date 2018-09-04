@@ -27,6 +27,9 @@ The file itself has the structure
         "article_selector": ".article__body",
         "title_selector": ".article__title"
     }
+  },
+  "service_settings" : {
+    "article_grab_cooldown" : 300
   }
 }
 ```
