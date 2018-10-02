@@ -28,9 +28,12 @@ func main(){
 	}
 	cntrl := make(chan service.Signal)
 	dffs := make(chan *models.DiffText)
+	tgsvc, err := service.NewTelegramBot(conf, dffs)
 	var grp sync.WaitGroup
-	grp.Add(1)
+	grp.Add(3)
 	go service.Differ(conf, dffs, cntrl, &grp)
+	go tgsvc.TelegramUpdateRunLoop()
+	go tgsvc.DiffSenderLoop()
 	log.Printf("Press Enter to quit")
 	reader := bufio.NewReader(os.Stdin)
 	_, _ = reader.ReadString('\n')

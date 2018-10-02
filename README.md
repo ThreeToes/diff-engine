@@ -29,7 +29,8 @@ The file itself has the structure
     }
   },
   "service_settings" : {
-    "article_grab_cooldown" : 300
+    "article_grab_cooldown" : 300,
+    "telegram_token": "someTelegramToken"
   }
 }
 ```

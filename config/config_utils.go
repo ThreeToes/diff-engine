@@ -49,6 +49,7 @@ type FeedEntry struct {
 }
 type ServiceSettings struct {
 	ArticleGrabCooldown	int `json:"article_grab_cooldown"`
+	TelegramToken string `json:"telegram_token"`
 }
 
 type ConfigFileOptions struct {

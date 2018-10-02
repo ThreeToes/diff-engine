@@ -34,6 +34,7 @@ func Differ(conf *config.ConfigFileOptions, articleChannel chan *models.DiffText
 					OriginalText: change.Original.Body,
 					NewText:      change.Changed.Body,
 					DiffText:     diffLib.DiffPrettyText(diffs),
+					Url:		  change.Original.Source,
 				}
 				articleChannel <- diff
 			}
